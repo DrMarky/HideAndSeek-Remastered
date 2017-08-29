@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+    </properties>
+
+    <groupId>me.drmarky</groupId>
+
+    <artifactId>hideandseek-remastered</artifactId>
+
+    <version>2.0.0</version>
+
+    <repositories>
+
+        <!-- Spigot can be found at the following repositories -->
+        <repository>
+            <id>spigot-repo</id>
+            <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
+        </repository>
+
+        <repository>
+            <id>sk89q-repo</id>
+            <url>http://maven.sk89q.com/artifactory/repo</url>
+        </repository>
+
+        <repository> <!-- This repo fixes issues with transitive dependencies -->
+            <id>jcenter</id>
+            <url>http://jcenter.bintray.com</url>
+        </repository>
+
+        <repository>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
+        </repository>
+
+        <repository>
+            <id>plotsquared-repo</id>
+            <url>http://ci.athion.net/job/PlotSquared/ws/mvn/</url>
+        </repository>
+
+    </repositories>
+
+
+    <!-- Dependencies -->
+    <dependencies>
+        <!--Spigot-API-->
+        <dependency>
+            <groupId>org.spigotmc</groupId>
+            <artifactId>spigot-api</artifactId>
+            <version>1.12-R0.1-SNAPSHOT</version>
+            <type>jar</type>
+            <scope>provided</scope>
+
+
+        </dependency>
+        <!--Bukkit API-->
+        <dependency>
+            <groupId>org.bukkit</groupId>
+            <artifactId>bukkit</artifactId>
+            <version>1.12-R0.1-SNAPSHOT</version>
+            <type>jar</type>
+            <scope>provided</scope>
+
+        </dependency>
+
+        <dependency>
+            <groupId>org.bukkit</groupId>
+            <artifactId>craftbukkit</artifactId>
+            <version>1.12-R0.1-SNAPSHOT</version>
+            <type>jar</type>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.plotsquared</groupId>
+            <artifactId>plotsquared-api</artifactId>
+            <version>17.08.09-ac9042b-1895</version>
+        </dependency>
+
+    </dependencies>
+    <!-- Build settings -->
+    <build>
+        <!-- Build plugins -->
+        <plugins>
+            <plugin>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <configuration>
+                    <tasks>
+                        <copy file="target/HideAndSeek-Remastered-2.0.0.jar"
+                              tofile="D:\Development\Server\plugins\HideAndSeek-Remastered-2.0.0.jar"/>
+                    </tasks>
+
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>install</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+</project>
