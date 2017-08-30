@@ -1,5 +1,7 @@
 package me.drmarky.hideandseek;
 
+import me.drmarky.hideandseek.Tasks.RegisterPlayers;
+import me.drmarky.hideandseek.Tasks.StartGame;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -18,7 +20,7 @@ public class Main extends JavaPlugin {
 
         registerEvents();
 
-        new HideAndSeekCommand();
+        new HideAndSeekCommand(new RegisterPlayers(), new StartGame(this));
     }
 
     @Override

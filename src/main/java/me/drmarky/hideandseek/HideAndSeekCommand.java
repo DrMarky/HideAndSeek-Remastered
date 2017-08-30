@@ -7,6 +7,9 @@ import com.intellectualcrafters.plot.commands.SubCommand;
 import com.intellectualcrafters.plot.object.Plot;
 import com.intellectualcrafters.plot.object.PlotPlayer;
 import com.plotsquared.general.commands.CommandDeclaration;
+import me.drmarky.hideandseek.Tasks.RegisterPlayers;
+import me.drmarky.hideandseek.Tasks.StartGame;
+import me.drmarky.hideandseek.Utilities.Data;
 import me.drmarky.hideandseek.Utilities.Utils;
 import org.bukkit.ChatColor;
 
@@ -21,8 +24,13 @@ import org.bukkit.ChatColor;
 
 public class HideAndSeekCommand extends SubCommand {
 
-    public HideAndSeekCommand() {
+    private final RegisterPlayers registerPlayers;
+    private final StartGame startGame;
+
+    public HideAndSeekCommand(RegisterPlayers registerPlayers, StartGame startGame) {
         MainCommand.getInstance().addCommand(this);
+        this.registerPlayers = registerPlayers;
+        this.startGame = startGame;
     }
 
     @Override
@@ -44,7 +52,7 @@ public class HideAndSeekCommand extends SubCommand {
 
         // CHECK to see whether they want to start a game or want to stop a game.
         int mins = 0;
-        if (args[0].matches("[0=9]+")) { // If true, they have entered a valid number of minutes to start the game.
+        if (args[0].matches("[0-9]+")) { // If true, they have entered a valid number of minutes to start the game.
             mins = Integer.valueOf(args[0]);
         } else {
 
@@ -60,7 +68,10 @@ public class HideAndSeekCommand extends SubCommand {
                 return true;
             }
 
-            //TODO: Check to make sure that a game has already started!
+            if (!(Data.plotsInPlay.contains(plot))) {
+                Utils.sendSpacedMessage(plotPlayer, "You cannot stop a game that has yet to start.");
+                return true;
+            }
 
             /*
             THIS IS WHERE THE STOP GAME PROCEDURE IS!
@@ -82,14 +93,18 @@ public class HideAndSeekCommand extends SubCommand {
             return true;
         }
 
-        //TODO: Check to make sure that a game hasn't already started!
+        if (Data.plotsInPlay.contains(plot)) {
+            Utils.sendSpacedMessage(plotPlayer, "A game has already started in this plot. Please wait until it ends or stop it using" + ChatColor.GOLD + " /plots hideandseek stop" + ChatColor.GRAY + ".");
+            return true;
+        }
 
         /*
         THIS IS WHERE THE START GAME PROCEDURE IS!
          */
 
-
-
+        Data.gameTime.put(plot, mins);
+        registerPlayers.registerPlayers(plot);
+        startGame.startGame(plot);
 
         return true;
     }
