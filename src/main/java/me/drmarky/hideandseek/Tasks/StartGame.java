@@ -42,7 +42,6 @@ public class StartGame {
 
         // SETUP HIDERS
         for (PlotPlayer hider : Utils.getHiders(plot)) {
-            System.out.println("HIDER" + hider);
             hider.teleport(plot.getHome());
             hider.setGameMode(PlotGameMode.ADVENTURE);
             hider.setFlight(false);
@@ -101,6 +100,8 @@ public class StartGame {
 
             Data.warnEndGameMap.put(plot, warnEndGame);
         }
+
+        Data.plotsInPlay.add(plot);
     }
 
 }

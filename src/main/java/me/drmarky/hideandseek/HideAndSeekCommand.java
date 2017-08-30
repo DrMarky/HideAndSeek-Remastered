@@ -9,6 +9,7 @@ import com.intellectualcrafters.plot.object.PlotPlayer;
 import com.plotsquared.general.commands.CommandDeclaration;
 import me.drmarky.hideandseek.Tasks.RegisterPlayers;
 import me.drmarky.hideandseek.Tasks.StartGame;
+import me.drmarky.hideandseek.Tasks.StopGame;
 import me.drmarky.hideandseek.Utilities.Data;
 import me.drmarky.hideandseek.Utilities.Utils;
 import org.bukkit.ChatColor;
@@ -26,11 +27,13 @@ public class HideAndSeekCommand extends SubCommand {
 
     private final RegisterPlayers registerPlayers;
     private final StartGame startGame;
+    private final StopGame stopGame;
 
-    public HideAndSeekCommand(RegisterPlayers registerPlayers, StartGame startGame) {
+    public HideAndSeekCommand(RegisterPlayers registerPlayers, StartGame startGame, StopGame stopGame) {
         MainCommand.getInstance().addCommand(this);
         this.registerPlayers = registerPlayers;
         this.startGame = startGame;
+        this.stopGame = stopGame;
     }
 
     @Override
@@ -53,7 +56,35 @@ public class HideAndSeekCommand extends SubCommand {
         // CHECK to see whether they want to start a game or want to stop a game.
         int mins = 0;
         if (args[0].matches("[0-9]+")) { // If true, they have entered a valid number of minutes to start the game.
+
             mins = Integer.valueOf(args[0]);
+            // CHECK  that the player has sufficient permissions.
+            if (!(plotPlayer.hasPermission("plots.hideandseek.start"))) {
+                Utils.sendSpacedMessage(plotPlayer, "You do not have sufficient permissions to start a game of hide and seek.");
+                return true;
+            }
+
+            // CHECK that there enough players in the plot.
+            if (plot.getPlayersInPlot().size() < 2) {
+                Utils.sendSpacedMessage(plotPlayer, "There must be at least two players inside the plot to start a game of hide and seek.");
+                return true;
+            }
+
+            if (Data.plotsInPlay.contains(plot)) {
+                Utils.sendSpacedMessage(plotPlayer, "A game has already started in this plot. Please wait until it ends or stop it using" + ChatColor.GOLD + " /plots hideandseek stop" + ChatColor.GRAY + ".");
+                return true;
+            }
+
+            /*
+            THIS IS WHERE THE START GAME PROCEDURE IS!
+            */
+
+            Data.gameTime.put(plot, mins);
+            registerPlayers.registerPlayers(plot);
+            startGame.startGame(plot);
+
+            return true;
+
         } else {
 
             // CHECK that they specified a proper sub-sub-command.
@@ -77,35 +108,8 @@ public class HideAndSeekCommand extends SubCommand {
             THIS IS WHERE THE STOP GAME PROCEDURE IS!
              */
 
-
-
-        }
-
-        // CHECK  that the player has sufficient permissions.
-        if (!(plotPlayer.hasPermission("plots.hideandseek.start"))) {
-            Utils.sendSpacedMessage(plotPlayer, "You do not have sufficient permissions to start a game of hide and seek.");
+            stopGame.stopGame(plot, true);
             return true;
         }
-
-        // CHECK that there enough players in the plot.
-        if (plot.getPlayersInPlot().size() < 2) {
-            Utils.sendSpacedMessage(plotPlayer, "There must be at least two players inside the plot to start a game of hide and seek.");
-            return true;
-        }
-
-        if (Data.plotsInPlay.contains(plot)) {
-            Utils.sendSpacedMessage(plotPlayer, "A game has already started in this plot. Please wait until it ends or stop it using" + ChatColor.GOLD + " /plots hideandseek stop" + ChatColor.GRAY + ".");
-            return true;
-        }
-
-        /*
-        THIS IS WHERE THE START GAME PROCEDURE IS!
-         */
-
-        Data.gameTime.put(plot, mins);
-        registerPlayers.registerPlayers(plot);
-        startGame.startGame(plot);
-
-        return true;
     }
 }
