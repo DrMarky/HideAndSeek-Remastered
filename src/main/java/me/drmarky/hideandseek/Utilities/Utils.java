@@ -91,6 +91,16 @@ public class Utils {
         player.getInventory().setHelmet(helmet);
     }
 
+    // Gives back the player their original helmet
+    public static void revertTempHelmet(Player player) {
+        if (Data.hat.get(player) != null) {
+            player.getInventory().setHelmet(Data.hat.get(player));
+            Data.hat.remove(player);
+        } else {
+            player.getInventory().setHelmet(null);
+        }
+    }
+
     // Clears a players potion effects
     public static void clearEffects(Player player) {
         for (PotionEffect potionEffect : player.getActivePotionEffects()) {
