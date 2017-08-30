@@ -41,9 +41,6 @@ public class RegisterPlayers {
             Data.directory.put(hider, new PlayerObject(Team.HIDER, plot));
             Utils.sendSpacedMessage(hider, "You have been added to the " + ChatColor.BLUE + "hider " + ChatColor.GRAY + "team. Hide from the " + ChatColor.RED + "seekers " + ChatColor.GRAY + "to avoid being tagged. If you are tagged you will become a " + ChatColor.RED + "seeker" + ChatColor.GRAY + ".");
         }
-
     }
-
-
 
 }
