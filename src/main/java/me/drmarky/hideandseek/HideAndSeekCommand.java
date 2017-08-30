@@ -4,8 +4,11 @@ import com.intellectualcrafters.plot.commands.CommandCategory;
 import com.intellectualcrafters.plot.commands.MainCommand;
 import com.intellectualcrafters.plot.commands.RequiredType;
 import com.intellectualcrafters.plot.commands.SubCommand;
+import com.intellectualcrafters.plot.object.Plot;
 import com.intellectualcrafters.plot.object.PlotPlayer;
 import com.plotsquared.general.commands.CommandDeclaration;
+import me.drmarky.hideandseek.Utilities.Utils;
+import org.bukkit.ChatColor;
 
 @CommandDeclaration(
         command = "hideandseek",
@@ -24,6 +27,70 @@ public class HideAndSeekCommand extends SubCommand {
 
     @Override
     public boolean onCommand(PlotPlayer plotPlayer, String[] args) {
+
+        Plot plot = plotPlayer.getCurrentPlot();
+
+        // CHECK that the player is the plot owner or is added on the plot.
+        if (!(plot.isOwner(plotPlayer.getUUID()) || plot.isAdded(plotPlayer.getUUID()))) {
+            Utils.sendSpacedMessage(plotPlayer, "You must be the plot owner or an added user on a claimed plot in order to start or stop a game on it.");
+            return true;
+        }
+
+        // CHECK that they enter one argument.
+        if (args.length != 1) {
+            Utils.sendSpacedMessage(plotPlayer, "Please specify how many minutes you would like the match to last or enter " + ChatColor.GOLD + "/p hideandseek stop " + ChatColor.GRAY + "to end a game that has already started.");
+            return true;
+        }
+
+        // CHECK to see whether they want to start a game or want to stop a game.
+        int mins = 0;
+        if (args[0].matches("[0=9]+")) { // If true, they have entered a valid number of minutes to start the game.
+            mins = Integer.valueOf(args[0]);
+        } else {
+
+            // CHECK that they specified a proper sub-sub-command.
+            if (!(args[0].equalsIgnoreCase("stop") || args[0].equalsIgnoreCase("cancel"))) {
+                Utils.sendSpacedMessage(plotPlayer, "Please specify how many minutes you would like the match to last or enter " + ChatColor.GOLD + "/p hideandseek stop " + ChatColor.GRAY + "to end a game that has already started.");
+                return true;
+            }
+
+            // CHECK that the player has sufficient permissions.
+            if (!(plotPlayer.hasPermission("plots.hideandseek.stop"))) {
+                Utils.sendSpacedMessage(plotPlayer, "You do not have sufficient permissions to start a game of hide and seek.");
+                return true;
+            }
+
+            //TODO: Check to make sure that a game has already started!
+
+            /*
+            THIS IS WHERE THE STOP GAME PROCEDURE IS!
+             */
+
+
+
+        }
+
+        // CHECK  that the player has sufficient permissions.
+        if (!(plotPlayer.hasPermission("plots.hideandseek.start"))) {
+            Utils.sendSpacedMessage(plotPlayer, "You do not have sufficient permissions to start a game of hide and seek.");
+            return true;
+        }
+
+        // CHECK that there enough players in the plot.
+        if (plot.getPlayersInPlot().size() < 2) {
+            Utils.sendSpacedMessage(plotPlayer, "There must be at least two players inside the plot to start a game of hide and seek.");
+            return true;
+        }
+
+        //TODO: Check to make sure that a game hasn't already started!
+
+        /*
+        THIS IS WHERE THE START GAME PROCEDURE IS!
+         */
+
+
+
+
         return true;
     }
 }
