@@ -10,28 +10,23 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.event.player.PlayerTeleportEvent;
 
-public class PlayerMoveListener implements Listener {
+public class PlayerTeleportListener implements Listener {
 
     private final GenerateWinner generateWinner;
     private final StopGame stopGame;
 
-    public PlayerMoveListener(GenerateWinner generateWinner, StopGame stopGame) {
+    public PlayerTeleportListener(GenerateWinner generateWinner, StopGame stopGame) {
         this.generateWinner = generateWinner;
         this.stopGame = stopGame;
     }
 
     @EventHandler
-    public void onMove(PlayerMoveEvent e) {
+    public void onPlayerTeleport(PlayerTeleportEvent e) {
 
         Player player = e.getPlayer();
         PlotPlayer plotPlayer = PlotPlayer.get(player.getName());
-
-        // CHECK that they're not supposed to be frozen while the hiders hide
-        if (Data.frozen.contains(player.getUniqueId())) {
-            e.setCancelled(true);
-        }
 
         // CHECK that they left the plot
         if (Data.directory.containsKey(plotPlayer)) {

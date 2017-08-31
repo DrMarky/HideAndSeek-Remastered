@@ -16,9 +16,11 @@ import org.bukkit.scheduler.BukkitScheduler;
 public class StartGame {
 
     private final Main main;
+    private final StopGame stopGame;
 
-    public StartGame(Main main) {
+    public StartGame(Main main, StopGame stopGame) {
         this.main = main;
+        this.stopGame = stopGame;
     }
 
     public void startGame(Plot plot) {
@@ -78,11 +80,8 @@ public class StartGame {
         int endGame = scheduler.scheduleSyncDelayedTask(main, new Runnable() {
             @Override
             public void run() {
-                Utils.sendListMessage(Utils.getPlayers(plot), "The hiders have won the game!");
-
-                //TODO: ADD STOP GAME PROCEDURE
-
-
+                Utils.sendListMessage(Utils.getPlayers(plot), "The " + ChatColor.BLUE + "hiders " + ChatColor.GRAY +  "have won the game!");
+                stopGame.stopGame(plot, false);
             }
         }, mins * 60 * 20);
 

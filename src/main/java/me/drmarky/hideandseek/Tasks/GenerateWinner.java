@@ -6,6 +6,12 @@ import org.bukkit.ChatColor;
 
 public class GenerateWinner {
 
+    private final StopGame stopGame;
+
+    public GenerateWinner(StopGame stopGame) {
+        this.stopGame = stopGame;
+    }
+
     public void generateWinner(Plot plot) {
 
         if (Utils.getHiders(plot).size() == 0 || Utils.getSeekers(plot).size() == 0) {
@@ -15,6 +21,8 @@ public class GenerateWinner {
             } else if (Utils.getSeekers(plot).size() == 0) {
                 Utils.sendListMessage(Utils.getPlayers(plot), "The " + ChatColor.BLUE + "hider " + ChatColor.GRAY + "team has won!");
             }
+
+            stopGame.stopGame(plot, false);
         }
     }
 

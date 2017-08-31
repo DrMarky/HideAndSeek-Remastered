@@ -119,4 +119,20 @@ public class Utils {
         player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, duration * 1200, 0, true, false, Color.BLACK));
     }
 
+    // Reverses all the settings applied to the player when they joined the game
+    public static void removePlayer(PlotPlayer plotPlayer) {
+        Player player = Bukkit.getPlayer(plotPlayer.getUUID());
+
+        player.setAllowFlight(true);
+        Utils.revertTempHelmet(player);
+        Utils.clearEffects(player);
+
+        if (Data.frozen.contains(plotPlayer.getUUID())) {
+            Data.frozen.remove(plotPlayer.getUUID());
+        }
+
+        Data.directory.remove(plotPlayer);
+        plotPlayer.setGameMode(PlotGameMode.CREATIVE);
+    }
+
 }
