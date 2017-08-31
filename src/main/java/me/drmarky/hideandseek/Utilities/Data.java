@@ -23,8 +23,11 @@ public class Data {
     // Stores how long the game on each plot will run for
     public static HashMap<Plot, Integer> gameTime = new HashMap<>();
 
-    // Stores the players original helmet
+    // Stores the player;s original helmet
     public static HashMap<Player, ItemStack> hat = new HashMap<>();
+
+    // Stores the player's elytra
+    public static HashMap<Player, ItemStack> elytra = new HashMap<>();
 
     // Stores the delayed tasks for each plot
     public static HashMap<Plot, Integer> releaseSeekerMap = new HashMap<>();

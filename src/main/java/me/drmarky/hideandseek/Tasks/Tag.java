@@ -29,11 +29,11 @@ public class Tag {
                         if (!(Data.frozen.contains(seeker.getUUID()))) {
                             Player hiderPlayer = Bukkit.getPlayer(hider.getUUID());
 
-                            Utils.sendListMessage(Utils.getPlayers(plot), ChatColor.GOLD + seeker.getName() + ChatColor.GRAY + " has found " + ChatColor.GOLD + hider.getName() + ChatColor.GRAY + ".");
                             hider.teleport(hider.getCurrentPlot().getHome());
                             hiderPlayer.getInventory().setHelmet(new ItemStack(Material.WOOL, 1, (byte) 14));
                             Utils.quickenPlayer(hiderPlayer, Data.gameTime.get(plot));
                             Data.directory.put(hider, new PlayerObject(Team.SEEKER, plot));
+                            Utils.sendListMessage(Utils.getPlayers(plot), ChatColor.GOLD + seeker.getName() + ChatColor.GRAY + " has found " + ChatColor.GOLD + hider.getName() + ChatColor.GRAY + ". " + ChatColor.GOLD + Utils.getHiders(plot).size() + ChatColor.GRAY + " hiders remain.");
 
                             generateWinner.generateWinner(plot);
                         }

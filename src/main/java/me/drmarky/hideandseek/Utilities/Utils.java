@@ -6,6 +6,7 @@ import com.intellectualcrafters.plot.object.PlotPlayer;
 import com.intellectualcrafters.plot.util.PlotGameMode;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
@@ -125,6 +126,7 @@ public class Utils {
 
         player.setAllowFlight(true);
         Utils.revertTempHelmet(player);
+        Utils.revertElytra(player);
         Utils.clearEffects(player);
 
         if (Data.frozen.contains(plotPlayer.getUUID())) {
@@ -133,6 +135,24 @@ public class Utils {
 
         Data.directory.remove(plotPlayer);
         plotPlayer.setGameMode(PlotGameMode.CREATIVE);
+    }
+
+    // Takes the players elytra so that it may layer be returned
+    public static void removeElytra(Player player) {
+        if (player.getInventory().getChestplate() != null) {
+            if (player.getInventory().getChestplate().getType().equals(Material.ELYTRA)) {
+                Data.elytra.put(player, player.getInventory().getChestplate());
+                player.getInventory().setChestplate(null);
+            }
+        }
+    }
+
+    // Gives the player back their elytra
+    public static void revertElytra(Player player) {
+        if (Data.elytra.containsKey(player)) {
+            player.getInventory().setChestplate(Data.elytra.get(player));
+            Data.elytra.remove(player);
+        }
     }
 
 }

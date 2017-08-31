@@ -38,6 +38,7 @@ public class StartGame {
         Player seekerPlayer = Bukkit.getPlayer(seeker.getUUID());
         seekerPlayer.setAllowFlight(true);
         Utils.setTempHelmet(seekerPlayer, new ItemStack(Material.WOOL, 1, (byte) 14));
+        Utils.removeElytra(seekerPlayer);
         Utils.clearEffects(seekerPlayer);
         Utils.blindPlayer(seekerPlayer, 30);
         Utils.quickenPlayer(seekerPlayer, mins);
@@ -50,6 +51,7 @@ public class StartGame {
             Player hiderPlayer = Bukkit.getPlayer(hider.getUUID());
             hiderPlayer.setAllowFlight(false);
             Utils.setTempHelmet(hiderPlayer, new ItemStack(Material.WOOL, 1, (byte) 11));
+            Utils.removeElytra(hiderPlayer);
             Utils.clearEffects(hiderPlayer);
         }
 
