@@ -25,30 +25,24 @@ public class PlayerMoveListener implements Listener {
     @EventHandler
     public void onMove(PlayerMoveEvent e) {
 
-        Player player = e.getPlayer();
-        PlotPlayer plotPlayer = PlotPlayer.get(player.getName());
+        if (e.getFrom().getBlockX() != e.getTo().getBlockX() || e.getFrom().getBlockY() != e.getTo().getBlockY() || e.getFrom().getBlockZ() != e.getTo().getBlockZ()) {
 
-        // CHECK that they're not supposed to be frozen while the hiders hide
-        if (Data.frozen.contains(player.getUniqueId())) {
-            e.setCancelled(true);
-        }
+            Player player = e.getPlayer();
+            PlotPlayer plotPlayer = PlotPlayer.get(player.getName());
 
-        // CHECK that they left the plot
-        if (Data.directory.containsKey(plotPlayer)) {
-            Plot plot = Data.directory.get(plotPlayer).plot;
-            if (!(plot.getPlayersInPlot().contains(plotPlayer))) {
-                Utils.sendListMessage(Utils.getPlayers(plot), ChatColor.GOLD + plotPlayer.getName() + ChatColor.GRAY + " has left the game.");
+            // CHECK that they're not supposed to be frozen while the hiders hide
+            if (Data.frozen.contains(player.getUniqueId())) {
+                e.setCancelled(true);
+            }
 
-                player.setAllowFlight(true);
-                Utils.revertTempHelmet(player);
-                Utils.clearEffects(player);
-
-                if (Data.frozen.contains(plotPlayer.getUUID())) {
-                    Data.frozen.remove(plotPlayer.getUUID());
+            // CHECK that they left the plot
+            if (Data.directory.containsKey(plotPlayer)) {
+                Plot plot = Data.directory.get(plotPlayer).plot;
+                if (!(plot.getPlayersInPlot().contains(plotPlayer))) {
+                    Utils.sendListMessage(Utils.getPlayers(plot), ChatColor.GOLD + plotPlayer.getName() + ChatColor.GRAY + " has left the game.");
+                    Utils.removePlayer(plotPlayer);
+                    generateWinner.generateWinner(plot);
                 }
-
-                Utils.removePlayer(plotPlayer);
-                generateWinner.generateWinner(plot);
             }
         }
     }

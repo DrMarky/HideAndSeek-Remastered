@@ -33,15 +33,6 @@ public class PlayerTeleportListener implements Listener {
             Plot plot = Data.directory.get(plotPlayer).plot;
             if (!(plot.getPlayersInPlot().contains(plotPlayer))) {
                 Utils.sendListMessage(Utils.getPlayers(plot), ChatColor.GOLD + plotPlayer.getName() + ChatColor.GRAY + " has left the game.");
-
-                player.setAllowFlight(true);
-                Utils.revertTempHelmet(player);
-                Utils.clearEffects(player);
-
-                if (Data.frozen.contains(plotPlayer.getUUID())) {
-                    Data.frozen.remove(plotPlayer.getUUID());
-                }
-
                 Utils.removePlayer(plotPlayer);
                 generateWinner.generateWinner(plot);
             }
