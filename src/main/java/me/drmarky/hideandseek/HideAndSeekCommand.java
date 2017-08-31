@@ -7,6 +7,7 @@ import com.intellectualcrafters.plot.commands.SubCommand;
 import com.intellectualcrafters.plot.object.Plot;
 import com.intellectualcrafters.plot.object.PlotPlayer;
 import com.plotsquared.general.commands.CommandDeclaration;
+import me.drmarky.hideandseek.Tasks.ListPlayers;
 import me.drmarky.hideandseek.Tasks.RegisterPlayers;
 import me.drmarky.hideandseek.Tasks.StartGame;
 import me.drmarky.hideandseek.Tasks.StopGame;
@@ -28,12 +29,14 @@ public class HideAndSeekCommand extends SubCommand {
     private final RegisterPlayers registerPlayers;
     private final StartGame startGame;
     private final StopGame stopGame;
+    private final ListPlayers listPlayers;
 
-    public HideAndSeekCommand(RegisterPlayers registerPlayers, StartGame startGame, StopGame stopGame) {
+    public HideAndSeekCommand(RegisterPlayers registerPlayers, StartGame startGame, StopGame stopGame, ListPlayers listPlayers) {
         MainCommand.getInstance().addCommand(this);
         this.registerPlayers = registerPlayers;
         this.startGame = startGame;
         this.stopGame = stopGame;
+        this.listPlayers = listPlayers;
     }
 
     @Override
@@ -88,28 +91,55 @@ public class HideAndSeekCommand extends SubCommand {
         } else {
 
             // CHECK that they specified a proper sub-sub-command.
-            if (!(args[0].equalsIgnoreCase("stop") || args[0].equalsIgnoreCase("cancel"))) {
-                Utils.sendSpacedMessage(plotPlayer, "Please specify how many minutes you would like the match to last or enter " + ChatColor.GOLD + "/p hideandseek stop " + ChatColor.GRAY + "to end a game that has already started.");
+            if (args[0].equalsIgnoreCase("stop") || args[0].equalsIgnoreCase("cancel")) {
+
+                // CHECK that the player has sufficient permissions.
+                if (!(plotPlayer.hasPermission("plots.hideandseek.stop"))) {
+                    Utils.sendSpacedMessage(plotPlayer, "You do not have sufficient permissions to start a game of hide and seek.");
+                    return true;
+                }
+
+                // CHECK that a game has already started
+                if (!(Data.plotsInPlay.contains(plot))) {
+                    Utils.sendSpacedMessage(plotPlayer, "You cannot stop a game that has yet to start.");
+                    return true;
+                }
+
+                /*
+                THIS IS WHERE THE STOP GAME PROCEDURE IS!
+                */
+
+                stopGame.stopGame(plot, true);
                 return true;
-            }
+            } else if (args[0].equalsIgnoreCase("list")) {
 
-            // CHECK that the player has sufficient permissions.
-            if (!(plotPlayer.hasPermission("plots.hideandseek.stop"))) {
-                Utils.sendSpacedMessage(plotPlayer, "You do not have sufficient permissions to start a game of hide and seek.");
+                // CHECK that the player has sufficient permissions.
+                if (!(plotPlayer.hasPermission("plots.hideandseek.list"))) {
+                    Utils.sendSpacedMessage(plotPlayer, "You do not have sufficient permissions to start a game of hide and seek.");
+                    return true;
+                }
+
+                // CHECK that a game has already started
+                if (!(Data.plotsInPlay.contains(plot))) {
+                    Utils.sendSpacedMessage(plotPlayer, "You cannot get the players of a game that does not exist.");
+                    return true;
+                }
+
+                /*
+                THIS IS WHERE THE LIST GAME PROCEDURE IS
+                 */
+
+                listPlayers.listPlayers(plot, plotPlayer);
+
                 return true;
-            }
 
-            if (!(Data.plotsInPlay.contains(plot))) {
-                Utils.sendSpacedMessage(plotPlayer, "You cannot stop a game that has yet to start.");
+            } else {
+
+                Utils.sendSpacedMessage(plotPlayer, "Invalid Usage. To start a game, enter " + ChatColor.GOLD + "/p hideandseek <minutes>" + ChatColor.GRAY + ". To stop a game, enter " + ChatColor.GOLD + "/p hideandseek stop" + ChatColor.GRAY + ". To list the players in your game, enter " + ChatColor.GOLD + "/p hideandseek list" + ChatColor.GRAY + ".");
                 return true;
+
             }
-
-            /*
-            THIS IS WHERE THE STOP GAME PROCEDURE IS!
-             */
-
-            stopGame.stopGame(plot, true);
-            return true;
         }
     }
+
 }

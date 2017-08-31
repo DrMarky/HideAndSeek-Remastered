@@ -20,7 +20,7 @@ public class Main extends JavaPlugin {
 
         registerEvents();
 
-        new HideAndSeekCommand(new RegisterPlayers(), new StartGame(this, new StopGame()), new StopGame());
+        new HideAndSeekCommand(new RegisterPlayers(), new StartGame(this, new StopGame()), new StopGame(), new ListPlayers());
     }
 
     @Override
