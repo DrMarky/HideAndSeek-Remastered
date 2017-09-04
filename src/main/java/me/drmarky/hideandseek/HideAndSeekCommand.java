@@ -4,6 +4,8 @@ import com.intellectualcrafters.plot.commands.CommandCategory;
 import com.intellectualcrafters.plot.commands.MainCommand;
 import com.intellectualcrafters.plot.commands.RequiredType;
 import com.intellectualcrafters.plot.commands.SubCommand;
+import com.intellectualcrafters.plot.config.C;
+import com.intellectualcrafters.plot.object.Location;
 import com.intellectualcrafters.plot.object.Plot;
 import com.intellectualcrafters.plot.object.PlotPlayer;
 import com.plotsquared.general.commands.CommandDeclaration;
@@ -75,6 +77,16 @@ public class HideAndSeekCommand extends SubCommand {
 
             if (Data.plotsInPlay.contains(plot)) {
                 Utils.sendSpacedMessage(plotPlayer, "A game has already started in this plot. Please wait until it ends or stop it using" + ChatColor.GOLD + " /plots hideandseek stop" + ChatColor.GRAY + ".");
+                return true;
+            }
+
+            // Check to make sure the plothome is in the plot
+            Location loc = plot.getHome();
+            Plot plot2 = Plot.getPlot(loc);
+
+            if (plot2 == null) {
+                // location not within plot boundaries
+                Utils.sendSpacedMessage(plotPlayer, "The plot home must be inside the plot border in order to begin the game. To set a new plot home, use " + ChatColor.GOLD + "/plot sethome" + ChatColor.GRAY + ".");
                 return true;
             }
 
