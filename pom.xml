@@ -14,7 +14,7 @@
 
     <artifactId>hideandseek-remastered</artifactId>
 
-    <version>2.0.1</version>
+    <version>2.0.2</version>
 
     <repositories>
 
@@ -92,8 +92,8 @@
                 <artifactId>maven-antrun-plugin</artifactId>
                 <configuration>
                     <tasks>
-                        <copy file="target/HideAndSeek-Remastered-2.0.1.jar"
-                              tofile="D:\Development\Server\plugins\HideAndSeek-Remastered-2.0.1.jar"/>
+                        <copy file="target/HideAndSeek-Remastered-2.0.2.jar"
+                              tofile="D:\Development\Server\plugins\HideAndSeek-Remastered-2.0.2.jar"/>
                     </tasks>
 
                 </configuration>
